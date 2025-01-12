@@ -80,7 +80,6 @@ async function extractParams(extractedParams) {
             throw new Error('Failed to parse JSON from Claude response.');
         }
         const params = JSON.parse(content.slice(jsonStartIndex, jsonEndIndex));
-        console.log("EXTRACTED",params)
         const apiParams = {
             fields: params.metrics.join(',') || 'impressions,clicks,spend', 
             time_range: params.date_range || { since: '2023-04-01', until: '2023-04-30' },
@@ -118,45 +117,6 @@ app.post('/process-message', async (req, res) => {
         res.json({ summary });
     } catch (error) {
         console.error('Error in process-message:', error.message);
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// Test Route: Ping Meta Insights
-app.get('/ad-insights', async (req, res) => {
-    try {
-        const insights = await getAdAccountInsights();
-        res.json(insights);
-    } catch (error) {
-        console.error('Error fetching insights:', error.message);
-        res.status(500).json({ error: error.message });
-    }
-});
-
-// Test Route: Ping Anthropic with Sample Data
-app.get('/test-anthropic', async (req, res) => {
-    try {
-        const sampleData = {
-            data: [
-                {
-                    campaign_id: '1234567890',
-                    campaign_name: 'Holiday Sales Campaign',
-                    impressions: 50000,
-                    clicks: 1200,
-                    spend: 750.50,
-                    reach: 40000,
-                    cpc: 0.625,
-                    cpm: 15.01,
-                    ctr: 2.4,
-                    frequency: 1.25
-                }
-            ]
-        };
-
-        const summary = await getAnthropicAnalysis(sampleData);
-        res.json({ summary });
-    } catch (error) {
-        console.error('Error in test-anthropic:', error.message);
         res.status(500).json({ error: error.message });
     }
 });
