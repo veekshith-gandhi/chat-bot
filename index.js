@@ -92,17 +92,6 @@ async function extractParams(extractedParams) {
     }
 }
 
-app.post('/process-insights', async (req, res) => {
-    try {
-        const extractedParams = req.body.extractedParams; // Assume this is passed in the request
-        const insights = await processExtractedParamsAndFetchInsights(extractedParams);
-        res.json(insights);
-    } catch (error) {
-        res.status(500).json({ error: error.message });
-    }
-});
-
-
 // Route to handle Slack -> Backend -> Claude -> Meta API -> Summary Flow
 app.post('/process-message', async (req, res) => {
     const { userMessage } = req.body;
